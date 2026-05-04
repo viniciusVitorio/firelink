@@ -1,6 +1,6 @@
 <?php
 
-namespace Firelink\Route;
+namespace Firelink\Facades;
 
 use Firelink\Http\Request;
 

@@ -15,6 +15,9 @@
   "autoload": {
     "psr-4": {
       "Firelink\\": "src/"
-    }
+    },
+    "files": [
+      "src/Support/helpers.php"
+    ]
   }
 }

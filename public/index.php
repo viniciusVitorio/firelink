@@ -1,13 +1,9 @@
 <?php
 
-use Firelink\Http\Request;
-use Firelink\Route\Route;
-use \Firelink\Controller\HomeController;
+define('BASE_PATH', dirname(__DIR__));
 
-require __DIR__ . '/../vendor/autoload.php';
+require BASE_PATH . '/vendor/autoload.php';
 
-$request = new Request();
+$app = require BASE_PATH . '/bootstrap/app.php';
 
-Route::get('/', [HomeController::class, 'index']);
-
-Route::dispatch($request);
+$app->run();

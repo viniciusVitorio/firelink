@@ -1,11 +1,11 @@
 <?php
 
-namespace Firelink\Controller;
+namespace Firelink\Http\Controllers;
 
 class HomeController
 {
     public function index()
     {
-        return 'Firelink 🔥';
+        ember('welcome');
     }
 }
