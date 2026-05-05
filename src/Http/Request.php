@@ -4,8 +4,71 @@ namespace Firelink\Http;
 
 class Request
 {
-    public function method()
+    protected $method;
+
+    public function getMethod(): string
     {
-        return $_SERVER['REQUEST_METHOD'];
+        if ($this->method !== null) {
+            return $this->method;
+        }
+
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+        if ($method === 'POST' && isset($_POST['_method'])) {
+            $method = $_POST['_method'];
+        }
+
+        return $this->method = strtoupper($method);
+    }
+
+    public function input(?string $key = null, $default = null)
+    {
+        $data = $_POST + $_GET;
+
+        if ($key === null) {
+            return $data;
+        }
+
+        return $data[$key] ?? $default;
+    }
+
+    public function query(?string $key = null, $default = null)
+    {
+        if ($key === null) {
+            return $_GET;
+        }
+
+        return $_GET[$key] ?? $default;
+    }
+
+    public function post(?string $key = null, $default = null)
+    {
+        if ($key === null) {
+            return $_POST;
+        }
+
+        return $_POST[$key] ?? $default;
+    }
+
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->input());
+    }
+
+    public function filled(string $key): bool
+    {
+        $value = $this->input($key);
+
+        return $value !== null && $value !== '';
+    }
+
+    public function all(): array
+    {
+        return $_POST + $_GET;
+    }
+
+    public function method(): string
+    {
+        return $this->getMethod();
     }
 }
