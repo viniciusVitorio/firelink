@@ -17,13 +17,14 @@ class Request
         if ($method === 'POST' && isset($_POST['_method'])) {
             $method = $_POST['_method'];
         }
-
+    
         return $this->method = strtoupper($method);
     }
 
     public function input(?string $key = null, $default = null)
     {
-        $data = $_POST + $_GET;
+
+        $data = array_merge($_GET, $_POST, $this->json());
 
         if ($key === null) {
             return $data;
@@ -64,11 +65,26 @@ class Request
 
     public function all(): array
     {
-        return $_POST + $_GET;
+        return $this->input();
     }
 
     public function method(): string
     {
         return $this->getMethod();
+    }
+
+    public function json($key = null, $default = null)
+    {
+        if ($this->json === null) {
+            $content = file_get_contents('php://input');
+
+            $this->json = json_decode($content, true) ?? [];
+        }
+
+        if ($key === null) {
+            return $this->json;
+        }
+
+        return $this->json[$key] ?? $default;
     }
 }
